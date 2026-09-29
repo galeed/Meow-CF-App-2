@@ -1,10 +1,10 @@
-// Cambia el atributo data-theme directamente en la etiqueta <html>
+// Aplica el tema dinámicamente
 function changeTuiSkin(skinName) {
     document.documentElement.setAttribute('data-theme', skinName);
     localStorage.setItem('meow_tui_skin', skinName);
 }
 
-// Abrir y cerrar el modal
+// Control del modal
 function toggleAboutModal(show) {
     const modal = document.getElementById('aboutModal');
     if (modal) {
@@ -12,7 +12,7 @@ function toggleAboutModal(show) {
     }
 }
 
-// Cargar preferencia guardada al iniciar la app
+// Inicialización de la skin guardada
 document.addEventListener('DOMContentLoaded', function() {
     const savedSkin = localStorage.getItem('meow_tui_skin') || 'green';
     changeTuiSkin(savedSkin);
