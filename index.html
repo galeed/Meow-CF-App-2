@@ -3,28 +3,481 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Meow CF App Studio [TUI]</title>
-    <link rel="stylesheet" href="tui-theme.css">
+    <title>Meow CF App Studio [TUI Terminal Edition]</title>
+    
+    <!-- Fuentes y CDN JSZip -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <style>
+        /* ============================================================
+           ASTRO TUI PORTFOLIO ENGINE (CSS ADAPTADO)
+           ============================================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* PALETAS DE COLORES CRT */
+        html, html[data-theme="green"] {
+            --tui-bg: #090d0a;
+            --tui-panel: #0f1711;
+            --tui-header: #142117;
+            --tui-border: #1e3a24;
+            --tui-text: #4ade80;
+            --tui-text-dim: #226b38;
+            --tui-accent: #22c55e;
+            --tui-input-bg: #050806;
+        }
+
+        html[data-theme="amber"] {
+            --tui-bg: #0d0a05;
+            --tui-panel: #171109;
+            --tui-header: #21180b;
+            --tui-border: #3d2b14;
+            --tui-text: #fbbf24;
+            --tui-text-dim: #785213;
+            --tui-accent: #f59e0b;
+            --tui-input-bg: #080502;
+        }
+
+        html[data-theme="cyan"] {
+            --tui-bg: #050a0e;
+            --tui-panel: #09121a;
+            --tui-header: #0d1a26;
+            --tui-border: #163647;
+            --tui-text: #38bdf8;
+            --tui-text-dim: #185a7d;
+            --tui-accent: #06b6d4;
+            --tui-input-bg: #030609;
+        }
+
+        html[data-theme="dracula"] {
+            --tui-bg: #0a0712;
+            --tui-panel: #120e1f;
+            --tui-header: #1a132e;
+            --tui-border: #332152;
+            --tui-text: #c084fc;
+            --tui-text-dim: #5b308c;
+            --tui-accent: #a855f7;
+            --tui-input-bg: #05030a;
+        }
+
+        html[data-theme="monochrome"] {
+            --tui-bg: #0a0a0a;
+            --tui-panel: #121212;
+            --tui-header: #1c1c1c;
+            --tui-border: #333333;
+            --tui-text: #e5e5e5;
+            --tui-text-dim: #666666;
+            --tui-accent: #ffffff;
+            --tui-input-bg: #050505;
+        }
+
+        html[data-theme="cappuccino"] {
+            --tui-bg: #0f0c0a;
+            --tui-panel: #181310;
+            --tui-header: #241b16;
+            --tui-border: #3d2f26;
+            --tui-text: #e0a96d;
+            --tui-text-dim: #785536;
+            --tui-accent: #dd9046;
+            --tui-input-bg: #080605;
+        }
+
+        body {
+            background-color: var(--tui-bg);
+            color: var(--tui-text);
+            font-family: 'Fira Code', monospace;
+            padding: 10px;
+            line-height: 1.4;
+            min-height: 100vh;
+        }
+
+        /* ESTRUCTURA TERMINAL */
+        .terminal-window {
+            background-color: var(--tui-panel);
+            border: 1px solid var(--tui-border);
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .terminal-header {
+            background-color: var(--tui-header);
+            border-bottom: 1px solid var(--tui-border);
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .terminal-title {
+            color: var(--tui-accent);
+            font-weight: 700;
+        }
+
+        .terminal-body {
+            padding: 14px;
+        }
+
+        .ascii-banner {
+            color: var(--tui-accent);
+            font-family: 'Fira Code', monospace;
+            font-size: clamp(5.5px, 2.1vw, 10.5px);
+            line-height: 1.15;
+            white-space: pre;
+            overflow-x: auto;
+            margin: 6px 0 14px 0;
+            text-align: center;
+            display: block;
+        }
+
+        /* NAVEGACIÓN Y STEPPER TUI */
+        .tui-nav {
+            display: flex;
+            gap: 6px;
+            border-bottom: 1px solid var(--tui-border);
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .tui-tab {
+            background: transparent;
+            color: var(--tui-text-dim);
+            border: 1px solid var(--tui-border);
+            padding: 6px 10px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .tui-tab:hover {
+            color: var(--tui-text);
+            border-color: var(--tui-text);
+        }
+
+        .tui-tab.active {
+            background-color: var(--tui-accent);
+            color: #000000 !important;
+            border-color: var(--tui-accent);
+            font-weight: bold;
+        }
+
+        .tui-tab.completed {
+            border-color: var(--tui-accent);
+            color: var(--tui-accent);
+        }
+
+        /* PANELES DE PASO */
+        .step-panel {
+            display: none;
+        }
+
+        .step-panel.active {
+            display: block;
+        }
+
+        .panel-heading {
+            border-bottom: 1px dashed var(--tui-border);
+            padding-bottom: 6px;
+            margin-bottom: 14px;
+            color: var(--tui-accent);
+            font-size: 0.95rem;
+        }
+
+        /* FORMULARIOS TUI */
+        .tui-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+        }
+
+        .tui-field-group {
+            margin-bottom: 12px;
+        }
+
+        .tui-field-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .tui-label {
+            display: block;
+            color: var(--tui-text);
+            font-size: 0.78rem;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .tui-input-wrapper {
+            display: flex;
+            align-items: center;
+            background-color: var(--tui-input-bg);
+            border: 1px solid var(--tui-border);
+            padding: 6px 10px;
+        }
+
+        .tui-prompt-symbol {
+            color: var(--tui-accent);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        .tui-input, select.tui-input, textarea.tui-input {
+            width: 100%;
+            background: transparent !important;
+            border: none !important;
+            color: var(--tui-text) !important;
+            font-size: 0.85rem !important;
+            font-family: 'Fira Code', monospace !important;
+            outline: none !important;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        select.tui-input option {
+            background-color: var(--tui-panel);
+            color: var(--tui-text);
+        }
+
+        input[type="color"].tui-color-picker {
+            background: transparent;
+            border: none;
+            width: 100%;
+            height: 28px;
+            cursor: pointer;
+        }
+
+        .tui-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 8px;
+            background-color: var(--tui-input-bg);
+            border: 1px solid var(--tui-border);
+        }
+
+        .tui-checkbox-label input[type="checkbox"] {
+            accent-color: var(--tui-accent);
+            width: 16px;
+            height: 16px;
+        }
+
+        .help-text {
+            font-size: 0.72rem;
+            color: var(--tui-text-dim);
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* GRID SELECCIÓN S.O. */
+        .os-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .os-card {
+            background-color: var(--tui-input-bg);
+            border: 1px solid var(--tui-border);
+            padding: 14px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .os-card:hover {
+            border-color: var(--tui-text);
+        }
+
+        .os-card.selected {
+            border-color: var(--tui-accent);
+            background-color: var(--tui-header);
+        }
+
+        .os-title {
+            font-weight: bold;
+            color: var(--tui-accent);
+            margin-top: 6px;
+            font-size: 0.9rem;
+        }
+
+        /* BOTONES */
+        .tui-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 18px;
+            border-top: 1px dashed var(--tui-border);
+            padding-top: 14px;
+        }
+
+        .tui-btn {
+            background-color: transparent;
+            color: var(--tui-text);
+            border: 1px solid var(--tui-border);
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .tui-btn:hover {
+            background-color: var(--tui-accent);
+            color: #000000 !important;
+            border-color: var(--tui-accent);
+        }
+
+        .tui-btn-accent {
+            border-color: var(--tui-accent);
+            color: var(--tui-accent);
+        }
+
+        /* BLOQUES DE CÓDIGO Y VISOR */
+        .tui-code-container {
+            margin-top: 12px;
+            border: 1px solid var(--tui-border);
+            background-color: var(--tui-input-bg);
+        }
+
+        .tui-code-header {
+            background-color: var(--tui-header);
+            padding: 6px 12px;
+            border-bottom: 1px solid var(--tui-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+        }
+
+        pre.tui-code-block {
+            padding: 12px;
+            color: var(--tui-text);
+            font-size: 0.78rem;
+            line-height: 1.4;
+            overflow-x: auto;
+            max-height: 300px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* AUDITORÍA CARD */
+        .audit-box {
+            background-color: var(--tui-input-bg);
+            border: 1px solid var(--tui-border);
+            padding: 12px;
+            margin-top: 12px;
+        }
+
+        .audit-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dotted var(--tui-border);
+            font-size: 0.8rem;
+        }
+
+        /* MODALES OVERLAY */
+        .tui-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.88);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 12px;
+        }
+
+        .tui-modal {
+            background-color: var(--tui-panel);
+            border: 1px solid var(--tui-accent);
+            width: 100%;
+            max-width: 780px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tui-modal-content {
+            padding: 16px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+        }
+
+        .dict-section-title {
+            color: var(--tui-accent);
+            border-bottom: 1px dashed var(--tui-border);
+            padding-bottom: 4px;
+            margin: 14px 0 8px 0;
+            font-size: 0.85rem;
+        }
+
+        .dict-item {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 2px solid var(--tui-border);
+        }
+
+        .dict-item h4 {
+            color: var(--tui-text);
+            font-size: 0.82rem;
+        }
+
+        .dict-item p {
+            color: var(--tui-text-dim);
+            font-size: 0.78rem;
+        }
+
+        /* RESPONSIVO MOBILE */
+        @media (max-width: 640px) {
+            .terminal-header { flex-direction: column; align-items: flex-start; }
+            .tui-actions { flex-direction: column-reverse; }
+            .tui-btn { width: 100%; justify-content: center; }
+        }
+    </style>
 </head>
 <body>
 
     <div class="terminal-window">
-        <!-- BARRA DE TÍTULO SUPERIOR -->
+        <!-- HEADER TERMINAL & THEME SELECTOR -->
         <div class="terminal-header">
-            <span class="terminal-title">bash - meow-cf-app-studio v1.3.0</span>
+            <span class="terminal-title">bash - meow-cf-app-studio v1.3.0 [CLI]</span>
 
-            <!-- SELECTOR DE TEMA -->
-            <div class="skin-selector-wrapper">
-                <span style="font-size: 0.75rem; color: var(--tui-text-dim);">🎨 Theme:</span>
-                <select id="skinSelect" class="skin-select" onchange="changeTuiSkin(this.value)">
-                    <option value="green">🟢 Phosphor Green</option>
-                    <option value="amber">🟠 Amber CRT</option>
-                    <option value="cyan">🔵 Cyber Cyan</option>
-                    <option value="dracula">🟣 Dracula Synth</option>
-                    <option value="monochrome">⚪ Monochrome</option>
-                    <option value="cappuccino">☕ Cappuccino</option>
-                </select>
-                <span style="font-size: 0.68rem; color: var(--tui-text-dim);">[▼]</span>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                <div style="display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--tui-border); padding: 2px 6px;">
+                    <span style="font-size: 0.72rem; color: var(--tui-text-dim);">🎨 Theme:</span>
+                    <select id="skinSelect" class="tui-input" style="width: auto; font-size: 0.72rem !important;" onchange="changeTuiSkin(this.value)">
+                        <option value="green">🟢 Phosphor Green</option>
+                        <option value="amber">🟠 Amber CRT</option>
+                        <option value="cyan">🔵 Cyber Cyan</option>
+                        <option value="dracula">🟣 Dracula Synth</option>
+                        <option value="monochrome">⚪ Monochrome</option>
+                        <option value="cappuccino">☕ Cappuccino</option>
+                    </select>
+                </div>
+
+                <button class="tui-btn" style="padding: 2px 8px;" onclick="toggleHelpModal(true)">[📖 Dict]</button>
+                <button class="tui-btn" style="padding: 2px 8px;" onclick="toggleAboutModal(true)">[ℹ️ About]</button>
             </div>
         </div>
 
@@ -39,40 +492,372 @@
                                                |_|   |_|      
             </pre>
 
-            <!-- PESTAÑAS TUI -->
+            <!-- STEPPER NAV -->
             <nav class="tui-nav">
-                <button class="tui-tab active" onclick="switchTab('manifest')">[1] Manifest.json</button>
-                <button class="tui-tab" onclick="switchTab('sw')">[2] Service Worker</button>
-                <button class="tui-tab" onclick="switchTab('github')">[3] GitHub Actions</button>
-                <button class="tui-tab" onclick="toggleAboutModal(true)">[i] Acerca de</button>
+                <button class="tui-tab active" id="pill-step-1" onclick="nextStep(1)">[1] OS_Target</button>
+                <button class="tui-tab" id="pill-step-2" onclick="nextStep(2)">[2] App_Data</button>
+                <button class="tui-tab" id="pill-step-3" onclick="nextStep(3)">[3] Engine_Cache</button>
+                <button class="tui-tab" id="pill-step-4" onclick="nextStep(4)">[4] UX_Push</button>
+                <button class="tui-tab" id="pill-step-5" onclick="nextStep(5)">[5] SEO_Audit</button>
+                <button class="tui-tab" id="pill-step-6" onclick="nextStep(6)">[6] Export_ZIP</button>
             </nav>
 
-            <!-- CONTENIDO PRINCIPAL -->
             <main>
-                <div class="tui-field-group">
-                    <label class="tui-label">APP_NAME (Nombre oficial):</label>
-                    <div class="tui-input-wrapper">
-                        <span class="tui-prompt-symbol">&gt;</span>
-                        <input type="text" class="tui-input" value="Meow CF App Studio" placeholder="Nombre de la app...">
+                <!-- PASO 1: SISTEMA OBJETIVO -->
+                <div class="step-panel active" id="step-1">
+                    <div class="panel-heading">+-- [ PASO 1: SISTEMA OBJETIVO ] --------------------------+</div>
+                    <p style="font-size: 0.8rem; color: var(--tui-text-dim); margin-bottom: 12px;">Selecciona la plataforma base para empaquetar tu aplicación web.</p>
+
+                    <div class="os-grid">
+                        <div class="os-card selected" onclick="selectOS('android', this)">
+                            <div style="font-size: 1.5rem;">🤖</div>
+                            <div class="os-title">Android (APK)</div>
+                            <span class="help-text">Capacitor / TWA / PWABuilder</span>
+                        </div>
+                        <div class="os-card" onclick="selectOS('ios', this)">
+                            <div style="font-size: 1.5rem;">🍎</div>
+                            <div class="os-title">iOS (Offline)</div>
+                            <span class="help-text">Service Worker + Metas Safari</span>
+                        </div>
+                        <div class="os-card" onclick="selectOS('universal', this)">
+                            <div style="font-size: 1.5rem;">🚀</div>
+                            <div class="os-title">Universal</div>
+                            <span class="help-text">Manifest.json + SW + CI/CD</span>
+                        </div>
+                    </div>
+
+                    <div class="tui-actions">
+                        <div></div>
+                        <button class="tui-btn tui-btn-accent" onclick="nextStep(2)">[ NEXT: DATOS_APP ➔ ]</button>
                     </div>
                 </div>
 
-                <div class="tui-field-group">
-                    <label class="tui-label">START_URL (Ruta inicial):</label>
-                    <div class="tui-input-wrapper">
-                        <span class="tui-prompt-symbol">&gt;</span>
-                        <input type="text" class="tui-input" value="./index.html">
+                <!-- PASO 2: DATOS APP -->
+                <div class="step-panel" id="step-2">
+                    <div class="panel-heading">+-- [ PASO 2: INFORMACIÓN GENERAL ] ----------------------+</div>
+
+                    <div class="tui-grid">
+                        <div class="tui-field-group">
+                            <label class="tui-label">APP_NAME (Nombre completo):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <input type="text" id="appName" class="tui-input" value="Mi Super App Web">
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group">
+                            <label class="tui-label">SHORT_NAME (Nombre en menú):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <input type="text" id="appShortName" class="tui-input" value="MeowApp">
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group full-width">
+                            <label class="tui-label">DESCRIPTION (Descripción de la app):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <textarea id="appDesc" class="tui-input" rows="2">Una increíble app web lista para compilar a APK y guardar offline en iOS.</textarea>
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group">
+                            <label class="tui-label">START_URL (Ruta inicial):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <input type="text" id="startUrl" class="tui-input" value="./index.html">
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group">
+                            <label class="tui-label">SCOPE (Alcance de navegación):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <input type="text" id="scopeUrl" class="tui-input" value="./">
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group">
+                            <label class="tui-label">VERSION (Versión del paquete):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <input type="text" id="appVersion" class="tui-input" value="1.0.0">
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group">
+                            <label class="tui-label">LANG (Idioma regional):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <select id="appLang" class="tui-input">
+                                    <option value="es-ES">Español (es-ES)</option>
+                                    <option value="en-US">Inglés (en-US)</option>
+                                    <option value="pt-BR">Portugués (pt-BR)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tui-actions">
+                        <button class="tui-btn" onclick="nextStep(1)">[ ⬅ ATRÁS ]</button>
+                        <button class="tui-btn tui-btn-accent" onclick="nextStep(3)">[ NEXT: MOTOR_CACHE ➔ ]</button>
                     </div>
                 </div>
 
-                <div style="margin-top: 16px;">
-                    <button class="tui-btn tui-btn-accent">[ EXECUTE_BUILD ]</button>
+                <!-- PASO 3: MOTOR Y CACHE -->
+                <div class="step-panel" id="step-3">
+                    <div class="panel-heading">+-- [ PASO 3: APARIENCIA Y MOTOR ] -----------------------+</div>
+
+                    <div class="tui-grid">
+                        <div class="tui-field-group full-width">
+                            <label class="tui-label">BUILD_ENGINE (Motor de compilación Android):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <select id="buildEngine" class="tui-input">
+                                    <option value="capacitor">Capacitor CLI (Recomendado)</option>
+                                    <option value="bubblewrap">Bubblewrap CLI (TWA)</option>
+                                    <option value="pwabuilder">PWABuilder CLI</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group full-width">
+                            <label class="tui-label">OFFLINE_STRATEGY (Estrategia Service Worker):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <select id="offlineStrategy" class="tui-input">
+                                    <option value="cache-first">Cache First (Carga instantánea)</option>
+                                    <option value="network-first">Network First (Prioriza red)</option>
+                                    <option value="stale-while-revalidate">Stale-While-Revalidate</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group">
+                            <label class="tui-label">DISPLAY_MODE (Visualización):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <select id="displayMode" class="tui-input">
+                                    <option value="standalone">Standalone (App sin barra)</option>
+                                    <option value="fullscreen">Fullscreen</option>
+                                    <option value="minimal-ui">Minimal-UI</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group">
+                            <label class="tui-label">ORIENTATION (Orientación):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <select id="orientation" class="tui-input">
+                                    <option value="any">Any (Adaptable)</option>
+                                    <option value="portrait">Portrait (Vertical)</option>
+                                    <option value="landscape">Landscape (Horizontal)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group">
+                            <label class="tui-label">THEME_COLOR (Color barra estado):</label>
+                            <div class="tui-input-wrapper">
+                                <input type="color" id="themeColor" value="#22c55e" class="tui-color-picker">
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group">
+                            <label class="tui-label">BACKGROUND_COLOR (Fondo de carga):</label>
+                            <div class="tui-input-wrapper">
+                                <input type="color" id="bgColor" value="#090d0a" class="tui-color-picker">
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group full-width">
+                            <label class="tui-label">ICON_PATH (Ruta icono PNG 512x512):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <input type="text" id="iconPath" class="tui-input" value="assets/icons/icon-512x512.png">
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group full-width">
+                            <label class="tui-checkbox-label">
+                                <input type="checkbox" id="clearCacheOnUpdate" checked>
+                                <span>Purgar cachés antiguas automáticamente en actualización</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="tui-actions">
+                        <button class="tui-btn" onclick="nextStep(2)">[ ⬅ ATRÁS ]</button>
+                        <button class="tui-btn tui-btn-accent" onclick="nextStep(4)">[ NEXT: ADVANCED_UX ➔ ]</button>
+                    </div>
+                </div>
+
+                <!-- PASO 4: OPCIONES AVANZADAS -->
+                <div class="step-panel" id="step-4">
+                    <div class="panel-heading">+-- [ PASO 4: OPCIONES AVANZADAS & PUSH ] -----------------+</div>
+
+                    <div class="tui-field-group full-width">
+                        <label class="tui-checkbox-label">
+                            <input type="checkbox" id="showInstallPrompt" checked>
+                            <span>Habilitar BeforeInstallPrompt (Modal nativo de instalación)</span>
+                        </label>
+                        <span class="help-text">Injecta script para captura del evento 'añadir a pantalla de inicio' (Android).</span>
+                    </div>
+
+                    <div class="tui-field-group full-width" style="margin-top: 10px;">
+                        <label class="tui-checkbox-label">
+                            <input type="checkbox" id="enablePush" onchange="toggleVapidSection()">
+                            <span>Habilitar Web Push Notifications Listener</span>
+                        </label>
+                    </div>
+
+                    <div id="vapidSection" class="tui-field-group full-width" style="display:none; padding: 10px; border: 1px dashed var(--tui-border);">
+                        <label class="tui-label">VAPID_PUBLIC_KEY (Para suscripción Push):</label>
+                        <div class="tui-input-wrapper">
+                            <span class="tui-prompt-symbol">&gt;</span>
+                            <input type="text" id="vapidKey" class="tui-input" placeholder="Ej. BEl62iUYgUivxIkv69yViEuiBIa...">
+                        </div>
+                    </div>
+
+                    <div class="tui-field-group full-width" style="margin-top: 10px;">
+                        <label class="tui-checkbox-label">
+                            <input type="checkbox" id="generateGithubAction" checked>
+                            <span>Generar GitHub Actions Workflow (CI/CD Automated Deploy)</span>
+                        </label>
+                        <span class="help-text">Crea automáticamente el archivo .github/workflows/deploy-pwa.yml</span>
+                    </div>
+
+                    <div class="tui-actions">
+                        <button class="tui-btn" onclick="nextStep(3)">[ ⬅ ATRÁS ]</button>
+                        <button class="tui-btn tui-btn-accent" onclick="nextStep(5)">[ NEXT: SEO_AUDIT ➔ ]</button>
+                    </div>
+                </div>
+
+                <!-- PASO 5: SEO Y AUDITORÍA -->
+                <div class="step-panel" id="step-5">
+                    <div class="panel-heading">+-- [ PASO 5: SEO, OPEN GRAPH & AUDITORÍA ] --------------+</div>
+
+                    <div class="tui-grid">
+                        <div class="tui-field-group">
+                            <label class="tui-label">OG_TITLE (Título Social):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <input type="text" id="ogTitle" class="tui-input" placeholder="Igual a App Name si se omite">
+                            </div>
+                        </div>
+
+                        <div class="tui-field-group">
+                            <label class="tui-label">OG_IMAGE (URL Imagen Social 1200x630):</label>
+                            <div class="tui-input-wrapper">
+                                <span class="tui-prompt-symbol">&gt;</span>
+                                <input type="url" id="ogImage" class="tui-input" value="https://midominio.com/assets/og-image.jpg">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 14px;">
+                        <button class="tui-btn tui-btn-accent" style="width: 100%; justify-content: center;" onclick="runAudit()">
+                            [ 🔬 EJECUTAR AUDITORÍA RÁPIDA DE PARÁMETROS ]
+                        </button>
+                    </div>
+
+                    <div id="auditResults" style="display:none;" class="audit-box">
+                        <div style="color: var(--tui-accent); font-weight: bold; margin-bottom: 8px;">RESULTS_OUTPUT:</div>
+                        <div id="auditList"></div>
+                    </div>
+
+                    <div class="tui-actions">
+                        <button class="tui-btn" onclick="nextStep(4)">[ ⬅ ATRÁS ]</button>
+                        <button class="tui-btn tui-btn-accent" onclick="generateFiles(); nextStep(6)">[ GENERAR ARCHIVOS ➔ ]</button>
+                    </div>
+                </div>
+
+                <!-- PASO 6: EXPORTACIÓN Y DESCARGA -->
+                <div class="step-panel" id="step-6">
+                    <div class="panel-heading">+-- [ PASO 6: EXPORTACIÓN DE CÓDIGO & MASTER ZIP ] -------+</div>
+
+                    <!-- TAB CODE SWITCHER -->
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
+                        <button class="tui-btn" onclick="switchTab('manifest')">manifest.json</button>
+                        <button class="tui-btn" onclick="switchTab('sw')">service-worker.js</button>
+                        <button class="tui-btn" onclick="switchTab('html')">index.html (Metas)</button>
+                        <button class="tui-btn" id="tabGithub" onclick="switchTab('github')" style="display:none;">GitHub CI/CD</button>
+                    </div>
+
+                    <!-- VISOR DE CÓDIGO -->
+                    <div class="tui-code-container">
+                        <div class="tui-code-header">
+                            <span id="codeTitle" style="color: var(--tui-accent);">manifest.json</span>
+                            <button class="tui-btn" style="padding: 2px 6px; font-size:0.7rem;" onclick="copyCode()">[ COPY_CODE ]</button>
+                        </div>
+                        <pre class="tui-code-block" id="codeBlock">// Presiona "GENERAR ARCHIVOS" en el paso anterior</pre>
+                    </div>
+
+                    <!-- CAJA DESCARGA ZIP -->
+                    <div style="margin-top: 16px; border: 1px solid var(--tui-accent); padding: 14px; background-color: var(--tui-header); text-align: center;">
+                        <h3 style="color: var(--tui-accent); margin-bottom: 4px;">¡PAQUETE LISTO PARA PRODUCCIÓN!</h3>
+                        <p style="font-size: 0.78rem; color: var(--tui-text-dim); margin-bottom: 12px;">Empaqueta la estructura de manifiestos, SW e inyecciones en un archivo comprimido.</p>
+
+                        <button class="tui-btn tui-btn-accent" style="padding: 10px 20px; font-size: 0.9rem;" onclick="downloadZip()">
+                            [ 💾 DESCARGAR MASTER ZIP (.ZIP) ]
+                        </button>
+                    </div>
+
+                    <div class="tui-actions">
+                        <button class="tui-btn" onclick="nextStep(5)">[ ⬅ REVISAR EDICIÓN ]</button>
+                    </div>
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- MODAL "ACERCA DE" -->
+    <!-- MODAL DICCIONARIO -->
+    <div class="tui-modal-overlay" id="helpModal" style="display: none;">
+        <div class="tui-modal">
+            <div class="terminal-header">
+                <span class="terminal-title">view --dictionary-terms.md</span>
+                <button class="tui-btn" style="padding: 1px 5px !important; font-size: 0.72rem !important;" onclick="toggleHelpModal(false)">[X] CLOSE</button>
+            </div>
+            <div class="tui-modal-content">
+                <div class="dict-section-title">📌 1. SISTEMAS OPERATIVOS OBJETIVO</div>
+                <div class="dict-item">
+                    <h4>🤖 Android (APK / PWA)</h4>
+                    <p>Estructuración para empaquetado nativo APK/AAB usando Bubblewrap, PWABuilder o Capacitor.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🍎 iOS (Safari WebApp / Offline)</h4>
+                    <p>Ajustes específicos para Safari Mobile en iPhone/iPad con metas de pantalla completa y Service Worker offline.</p>
+                </div>
+
+                <div class="dict-section-title">📝 2. DATOS GENERALES DE LA WEBAPP</div>
+                <div class="dict-item">
+                    <h4>📛 Nombre Corto (`short_name`)</h4>
+                    <p>Nombre reducido que aparece debajo del icono en la pantalla de inicio móvil.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🚀 Scope (`scope`)</h4>
+                    <p>Restringe el rango de URLs pertenecientes a la app. Navegar fuera abre el navegador web.</p>
+                </div>
+
+                <div class="dict-section-title">🎨 3. APARIENCIA Y COMPORTAMIENTO</div>
+                <div class="dict-item">
+                    <h4>📱 Modo Standalone</h4>
+                    <p>Oculta controles de navegación del browser para ofrecer experiencia nativa.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🎨 Theme Color</h4>
+                    <p>Define el tono de la barra de estado superior del sistema operativo.</p>
+                </div>
+
+                <div style="margin-top: 16px; text-align: center;">
+                    <button class="tui-btn tui-btn-accent" onclick="toggleHelpModal(false)">[ ENTENDIDO / CERRAR ]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ACERCA DE -->
     <div class="tui-modal-overlay" id="aboutModal" style="display: none;">
         <div class="tui-modal">
             <div class="terminal-header">
@@ -81,17 +866,15 @@
             </div>
             <div class="tui-modal-content">
                 <h3 style="color: var(--tui-accent); margin-bottom: 6px;">🐱 Meow CF App Studio v1.3.0</h3>
-                <p style="color: var(--tui-text);">Suite interactiva para generación de manifiestos PWA, scripts Service Worker offline y compilación nativa Android.</p>
+                <p style="color: var(--tui-text); margin-bottom: 12px;">Suite interactiva TUI para estructuración de manifiestos PWA, scripts Service Worker offline y workflows de compilación Android CI/CD.</p>
 
-                <div class="tui-code-block">
+                <div style="background-color: var(--tui-input-bg); border: 1px dashed var(--tui-border); padding: 10px; font-size: 0.78rem; margin-bottom: 14px;">
                     ORGANIZATION : Moustache de Chat LAB<br>
                     LEAD_DEV     : Galeed León<br>
-                    INTERFACE    : TUI Terminal Engine
+                    INTERFACE    : Astro TUI Terminal Engine
                 </div>
 
-                <div style="margin-top: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-                    <p style="color: var(--tui-text-dim); font-size: 0.78rem;"># Repositorios y artefactos de compilación:</p>
-
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
                     <a href="https://github.com/galeed/Meow-CF-App-2" target="_blank" rel="noopener noreferrer" class="tui-btn">
                         <span>&lt;/&gt; GitHub Repository</span>
                     </a>
@@ -104,6 +887,289 @@
         </div>
     </div>
 
-    <script src="tui-skins.js"></script>
+    <!-- LÓGICA DE CONTROL JS COMPLETA -->
+    <script>
+        let currentOS = 'android';
+        let generatedFiles = {};
+
+        // CAMBIO DE TEMA DINO
+        function changeTuiSkin(skinName) {
+            document.documentElement.setAttribute('data-theme', skinName);
+            localStorage.setItem('meow_tui_skin', skinName);
+        }
+
+        // SELECCIÓN DE S.O.
+        function selectOS(os, el) {
+            currentOS = os;
+            document.querySelectorAll('.os-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        // CONTROL DE PASOS STEPPER
+        function nextStep(step) {
+            document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(`step-${step}`).classList.add('active');
+
+            document.querySelectorAll('.tui-tab').forEach((p, idx) => {
+                p.classList.remove('active', 'completed');
+                if (idx < step - 1) p.classList.add('completed');
+                if (idx === step - 1) p.classList.add('active');
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleVapidSection() {
+            const isPush = document.getElementById('enablePush').checked;
+            document.getElementById('vapidSection').style.display = isPush ? 'block' : 'none';
+        }
+
+        function switchTab(tab) {
+            const titleEl = document.getElementById('codeTitle');
+            const block = document.getElementById('codeBlock');
+
+            let codeStr = "";
+            if (tab === 'manifest') {
+                titleEl.textContent = "manifest.json";
+                codeStr = generatedFiles.manifest || "// Sin generar";
+            } else if (tab === 'sw') {
+                titleEl.textContent = "service-worker.js";
+                codeStr = generatedFiles.sw || "// Sin generar";
+            } else if (tab === 'html') {
+                titleEl.textContent = "index.html (Inyecciones PWA)";
+                codeStr = generatedFiles.html || "// Sin generar";
+            } else if (tab === 'github') {
+                titleEl.textContent = ".github/workflows/deploy-pwa.yml";
+                codeStr = generatedFiles.github || "// Deshabilitado";
+            }
+
+            block.textContent = codeStr;
+        }
+
+        function toggleHelpModal(show) {
+            document.getElementById('helpModal').style.display = show ? 'flex' : 'none';
+        }
+
+        function toggleAboutModal(show) {
+            document.getElementById('aboutModal').style.display = show ? 'flex' : 'none';
+        }
+
+        async function copyCode() {
+            const code = document.getElementById('codeBlock').innerText;
+            try {
+                await navigator.clipboard.writeText(code);
+                alert("Código copiado al portapapeles ✅");
+            } catch (err) {
+                alert("Error al copiar automáticamente.");
+            }
+        }
+
+        // AUDITORÍA DE DATOS
+        function runAudit() {
+            const auditList = document.getElementById('auditList');
+            document.getElementById('auditResults').style.display = 'block';
+            auditList.innerHTML = '';
+
+            const checks = [
+                { name: "Nombre Corto (<=12 caracteres)", pass: document.getElementById('appShortName').value.length <= 12 },
+                { name: "Color de Tema Definido", pass: !!document.getElementById('themeColor').value },
+                { name: "Estrategia Caché Configurada", pass: true },
+                { name: "Icono PNG Válido", pass: document.getElementById('iconPath').value.includes('.png') }
+            ];
+
+            checks.forEach(c => {
+                const item = document.createElement('div');
+                item.className = 'audit-item';
+                item.innerHTML = `<span>${c.name}</span> <span style="color:${c.pass ? 'var(--tui-accent)' : '#ef4444'}">${c.pass ? '[ PASS ]' : '[ FAIL ]'}</span>`;
+                auditList.appendChild(item);
+            });
+        }
+
+        // GENERACIÓN DE ARCHIVOS DE CÓDIGO
+        function generateFiles() {
+            const name = document.getElementById('appName').value;
+            const shortName = document.getElementById('appShortName').value;
+            const desc = document.getElementById('appDesc').value;
+            const startUrl = document.getElementById('startUrl').value;
+            const scope = document.getElementById('scopeUrl').value;
+            const lang = document.getElementById('appLang').value;
+            const display = document.getElementById('displayMode').value;
+            const orientation = document.getElementById('orientation').value;
+            const themeCol = document.getElementById('themeColor').value;
+            const bgCol = document.getElementById('bgColor').value;
+            const iconPath = document.getElementById('iconPath').value;
+
+            const strategy = document.getElementById('offlineStrategy').value;
+            const clearCache = document.getElementById('clearCacheOnUpdate').checked;
+            const showInstall = document.getElementById('showInstallPrompt').checked;
+            const enablePush = document.getElementById('enablePush').checked;
+            const vapidKey = document.getElementById('vapidKey').value;
+            const genGithub = document.getElementById('generateGithubAction').checked;
+
+            // 1. MANIFEST JSON
+            const manifestObj = {
+                name: name,
+                short_name: shortName,
+                description: desc,
+                start_url: startUrl,
+                scope: scope,
+                display: display,
+                background_color: bgCol,
+                theme_color: themeCol,
+                orientation: orientation,
+                lang: lang,
+                icons: [{
+                    src: iconPath,
+                    sizes: "192x192 512x512",
+                    type: "image/png",
+                    purpose: "any maskable"
+                }]
+            };
+
+            if (currentOS === 'android') {
+                manifestObj.related_applications = [{
+                    platform: "play",
+                    url: "https://play.google.com/store/apps/details?id=com.tuapp.id"
+                }];
+            }
+
+            generatedFiles.manifest = JSON.stringify(manifestObj, null, 4);
+
+            // 2. SERVICE WORKER
+            let swCode = `// Service Worker Generado automáticamente\n`;
+            swCode += `const CACHE_NAME = 'app-cache-v1-${Date.now()}';\n`;
+            swCode += `const ASSETS_TO_CACHE = [\n  '${startUrl}',\n  '${iconPath}'\n];\n\n`;
+
+            swCode += `self.addEventListener('install', (event) => {\n`;
+            swCode += `  self.skipWaiting();\n`;
+            swCode += `  event.waitUntil(\n    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))\n  );\n});\n\n`;
+
+            if (clearCache) {
+                swCode += `self.addEventListener('activate', (event) => {\n`;
+                swCode += `  event.waitUntil(\n    caches.keys().then((keyList) => {\n`;
+                swCode += `      return Promise.all(keyList.map((key) => {\n`;
+                swCode += `        if (key !== CACHE_NAME) return caches.delete(key);\n`;
+                swCode += `      }));\n    })\n  );\n  return self.clients.claim();\n});\n\n`;
+            }
+
+            if (strategy === 'cache-first') {
+                swCode += `// Estrategia: Cache First\nself.addEventListener('fetch', (event) => {\n`;
+                swCode += `  event.respondWith(caches.match(event.request).then((res) => res || fetch(event.request)));\n});\n`;
+            } else if (strategy === 'network-first') {
+                swCode += `// Estrategia: Network First\nself.addEventListener('fetch', (event) => {\n`;
+                swCode += `  event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));\n});\n`;
+            } else {
+                swCode += `// Estrategia: Stale-While-Revalidate\nself.addEventListener('fetch', (event) => {\n`;
+                swCode += `  event.respondWith(caches.match(event.request).then((res) => {\n`;
+                swCode += `    const fetchPromise = fetch(event.request).then((networkRes) => {\n`;
+                swCode += `      caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkRes.clone()));\n`;
+                swCode += `      return networkRes;\n    });\n    return res || fetchPromise;\n  }));\n});\n`;
+            }
+
+            if (enablePush) {
+                swCode += `\n// --- PUSH NOTIFICATIONS SUPPORT ---\n`;
+                swCode += `self.addEventListener('push', (event) => {\n`;
+                swCode += `  const data = event.data ? event.data.json() : { title: 'Notificación', body: 'Nueva alerta!' };\n`;
+                swCode += `  event.waitUntil(self.registration.showNotification(data.title, {\n`;
+                swCode += `    body: data.body,\n    icon: '${iconPath}',\n    badge: '${iconPath}'\n  }));\n});\n\n`;
+                swCode += `self.addEventListener('notificationclick', (event) => {\n`;
+                swCode += `  event.notification.close();\n`;
+                swCode += `  event.waitUntil(clients.openWindow('${startUrl}'));\n});\n`;
+            }
+
+            generatedFiles.sw = swCode;
+
+            // 3. HTML INYECCIONES
+            let htmlCode = `<!-- INYECTAR DENTRO DEL <head> -->\n`;
+            htmlCode += `<meta name="theme-color" content="${themeCol}">\n`;
+            htmlCode += `<link rel="manifest" href="./manifest.json">\n\n`;
+            htmlCode += `<!-- Metas para iOS Offline / Standalone -->\n`;
+            htmlCode += `<meta name="apple-mobile-web-app-capable" content="yes">\n`;
+            htmlCode += `<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">\n`;
+            htmlCode += `<meta name="apple-mobile-web-app-title" content="${shortName}">\n`;
+            htmlCode += `<link rel="apple-touch-icon" href="${iconPath}">\n`;
+
+            let ogT = document.getElementById('ogTitle').value || name;
+            let ogImg = document.getElementById('ogImage').value;
+            if (ogT) {
+                htmlCode += `\n<!-- Open Graph SEO -->\n`;
+                htmlCode += `<meta property="og:title" content="${ogT}">\n`;
+                htmlCode += `<meta property="og:description" content="${desc}">\n`;
+                if (ogImg) htmlCode += `<meta property="og:image" content="${ogImg}">\n`;
+            }
+
+            htmlCode += `\n<!-- INYECTAR ANTES DE CERRAR EL <body> -->\n<script>\n`;
+            htmlCode += `  if ('serviceWorker' in navigator) {\n`;
+            htmlCode += `    window.addEventListener('load', () => {\n`;
+            htmlCode += `      navigator.serviceWorker.register('./service-worker.js').then((reg) => {\n`;
+            htmlCode += `        console.log('SW Registrado:', reg.scope);\n`;
+
+            if (enablePush && vapidKey) {
+                htmlCode += `        reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: '${vapidKey}' });\n`;
+            }
+
+            htmlCode += `      });\n    });\n  }\n`;
+
+            if (showInstall) {
+                htmlCode += `  let deferredPrompt;\n`;
+                htmlCode += `  window.addEventListener('beforeinstallprompt', (e) => {\n`;
+                htmlCode += `    e.preventDefault();\n    deferredPrompt = e;\n  });\n`;
+            }
+            htmlCode += `<\/script>`;
+
+            generatedFiles.html = htmlCode;
+
+            // 4. GITHUB ACTION WORKFLOW
+            if (genGithub) {
+                document.getElementById('tabGithub').style.display = 'inline-block';
+                let yaml = `name: Deploy PWA\non:\n  push:\n    branches: [ "main" ]\n\n`;
+                yaml += `jobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n`;
+                yaml += `      - uses: actions/checkout@v3\n`;
+                yaml += `      - name: Deploy PWA\n`;
+                yaml += `        run: echo "Deploying ${shortName}..."\n`;
+                generatedFiles.github = yaml;
+            } else {
+                document.getElementById('tabGithub').style.display = 'none';
+                generatedFiles.github = "";
+            }
+
+            switchTab('manifest');
+        }
+
+        // DESCARGA ZIP MASTER CON JSZIP
+        function downloadZip() {
+            if (!generatedFiles.manifest) {
+                alert("Primero genera los archivos en el paso 5.");
+                return;
+            }
+
+            const zip = new JSZip();
+            zip.file("manifest.json", generatedFiles.manifest);
+            zip.file("service-worker.js", generatedFiles.sw);
+            zip.file("injections-index.html", generatedFiles.html);
+
+            if (generatedFiles.github) {
+                const githubFolder = zip.folder(".github");
+                const wfFolder = githubFolder.folder("workflows");
+                wfFolder.file("deploy-pwa.yml", generatedFiles.github);
+            }
+
+            zip.generateAsync({ type: "blob" }).then(function (content) {
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(content);
+                a.download = `meow-pwa-config-${currentOS}.zip`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
+        }
+
+        // INICIALIZACIÓN
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedSkin = localStorage.getItem('meow_tui_skin') || 'green';
+            changeTuiSkin(savedSkin);
+            document.getElementById('skinSelect').value = savedSkin;
+        });
+    </script>
 </body>
 </html>
