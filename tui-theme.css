@@ -1,16 +1,16 @@
 /* ==========================================
-   CONFIGURACIÓN GLOBAL DE SKINS TUI Y ESTÁTICA
+   CONFIGURACIÓN ESTÁTICA Y TEMAS DINÁMICOS
    ========================================== */
 
-/* Anular rebotes, animaciones y transformaciones de escala */
+/* Congelar rebotes y transformaciones */
 *, *::before, *::after {
     animation: none !important;
     transform: none !important;
     transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease !important;
 }
 
-/* 🟢 Phosphor Green (Por defecto) */
-:root, [data-theme="green"] {
+/* 🟢 Phosphor Green (Predeterminado) */
+html, html[data-theme="green"] {
     --tui-bg: #090c0a;
     --tui-panel: #0e1410;
     --tui-header: #141f17;
@@ -22,7 +22,7 @@
 }
 
 /* 🟠 Amber CRT */
-[data-theme="amber"] {
+html[data-theme="amber"] {
     --tui-bg: #0c0a06;
     --tui-panel: #141008;
     --tui-header: #21190c;
@@ -34,7 +34,7 @@
 }
 
 /* 🔵 Cyber Cyan */
-[data-theme="cyan"] {
+html[data-theme="cyan"] {
     --tui-bg: #060b0e;
     --tui-panel: #091318;
     --tui-header: #0e1e26;
@@ -46,7 +46,7 @@
 }
 
 /* 🟣 Dracula Synth */
-[data-theme="dracula"] {
+html[data-theme="dracula"] {
     --tui-bg: #0d0a14;
     --tui-panel: #140e21;
     --tui-header: #1f1433;
@@ -58,7 +58,7 @@
 }
 
 /* ⚪ Monochrome */
-[data-theme="monochrome"] {
+html[data-theme="monochrome"] {
     --tui-bg: #0a0a0a;
     --tui-panel: #121212;
     --tui-header: #1c1c1c;
@@ -70,7 +70,7 @@
 }
 
 /* ☕ Cappuccino */
-[data-theme="cappuccino"] {
+html[data-theme="cappuccino"] {
     --tui-bg: #0f0c0a;
     --tui-panel: #181310;
     --tui-header: #241b16;
@@ -82,7 +82,7 @@
 }
 
 /* ==========================================
-   APLICACIÓN DE VARIABLES A LA ESTRUCTURA TUI
+   MAPPING DE ELEMENTOS A VARIABLES
    ========================================== */
 
 body {
@@ -117,20 +117,15 @@ body {
 .tui-tab.active {
     background-color: var(--tui-accent) !important;
     color: #000000 !important;
-    font-weight: bold;
 }
 
-.tui-label {
+.tui-label, .tui-input {
     color: var(--tui-text) !important;
 }
 
 .tui-input-wrapper {
     background-color: var(--tui-input-bg) !important;
     border-color: var(--tui-border) !important;
-}
-
-.tui-input {
-    color: var(--tui-text) !important;
 }
 
 .tui-btn {
@@ -143,27 +138,33 @@ body {
     color: #000000 !important;
 }
 
-/* Selector desplegable de Skins */
+/* ESTILO RETRO TERMINAL PARA EL SELECTOR (OVERRIDE IOS) */
 .skin-selector-wrapper {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     background-color: var(--tui-input-bg);
     border: 1px solid var(--tui-border);
-    padding: 2px 6px;
+    padding: 2px 8px;
 }
 
 .skin-select {
-    background: transparent;
-    color: var(--tui-text);
-    border: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: transparent !important;
+    color: var(--tui-text) !important;
+    border: none !important;
+    border-radius: 0px !important;
     font-family: inherit;
     font-size: 0.8rem;
+    font-weight: 700;
     outline: none;
     cursor: pointer;
+    padding-right: 12px;
 }
 
 .skin-select option {
-    background-color: var(--tui-panel);
-    color: var(--tui-text);
+    background-color: var(--tui-panel) !important;
+    color: var(--tui-text) !important;
 }
