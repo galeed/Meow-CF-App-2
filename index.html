@@ -2,20 +2,20 @@
 <html lang="es" data-theme="green">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Meow CF App Studio [TUI]</title>
     <link rel="stylesheet" href="tui-theme.css">
 </head>
 <body>
 
     <div class="terminal-window">
-        <!-- BARRA SUPERIOR DE LA TERMINAL -->
+        <!-- BARRA DE TÍTULO SUPERIOR -->
         <div class="terminal-header">
             <span class="terminal-title">bash - meow-cf-app-studio v1.3.0</span>
 
-            <!-- SELECTOR DESPLEGABLE DE TEMA -->
+            <!-- SELECTOR DE TEMA -->
             <div class="skin-selector-wrapper">
-                <span style="font-size: 0.75rem; color: var(--text-dim);">🎨 Theme:</span>
+                <span style="font-size: 0.75rem; color: var(--tui-text-dim);">🎨 Theme:</span>
                 <select id="skinSelect" class="skin-select" onchange="changeTuiSkin(this.value)">
                     <option value="green">🟢 Phosphor Green</option>
                     <option value="amber">🟠 Amber CRT</option>
@@ -24,12 +24,12 @@
                     <option value="monochrome">⚪ Monochrome</option>
                     <option value="cappuccino">☕ Cappuccino</option>
                 </select>
-                <span style="font-size: 0.7rem; color: var(--text-dim);">[▼]</span>
+                <span style="font-size: 0.68rem; color: var(--tui-text-dim);">[▼]</span>
             </div>
         </div>
 
         <div class="terminal-body">
-            <!-- BANNER ASCII AJUSTADO PARA MÓVILES -->
+            <!-- BANNER ASCII -->
             <pre class="ascii-banner">
  __  __                      ____ _____    _                  
 |  \/  | ___  _____7 ___    / ___|  ___|  / \   _ __  _ __    
@@ -39,7 +39,7 @@
                                                |_|   |_|      
             </pre>
 
-            <!-- MENÚ DE NAVEGACIÓN RETRO -->
+            <!-- PESTAÑAS TUI -->
             <nav class="tui-nav">
                 <button class="tui-tab active" onclick="switchTab('manifest')">[1] Manifest.json</button>
                 <button class="tui-tab" onclick="switchTab('sw')">[2] Service Worker</button>
@@ -47,13 +47,13 @@
                 <button class="tui-tab" onclick="toggleAboutModal(true)">[i] Acerca de</button>
             </nav>
 
-            <!-- FORMULARIO PRINCIPAL -->
+            <!-- CONTENIDO PRINCIPAL -->
             <main>
                 <div class="tui-field-group">
                     <label class="tui-label">APP_NAME (Nombre oficial):</label>
                     <div class="tui-input-wrapper">
                         <span class="tui-prompt-symbol">&gt;</span>
-                        <input type="text" class="tui-input" value="Meow CF App Studio" placeholder="Nombre...">
+                        <input type="text" class="tui-input" value="Meow CF App Studio" placeholder="Nombre de la app...">
                     </div>
                 </div>
 
@@ -65,23 +65,23 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 18px;">
+                <div style="margin-top: 16px;">
                     <button class="tui-btn tui-btn-accent">[ EXECUTE_BUILD ]</button>
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- MODAL ACERCA DE -->
+    <!-- MODAL "ACERCA DE" -->
     <div class="tui-modal-overlay" id="aboutModal" style="display: none;">
         <div class="tui-modal">
             <div class="terminal-header">
                 <span class="terminal-title">view --about-system.md</span>
-                <button class="tui-btn" style="padding: 2px 6px !important; font-size: 0.75rem !important;" onclick="toggleAboutModal(false)">[X] CLOSE</button>
+                <button class="tui-btn" style="padding: 1px 5px !important; font-size: 0.72rem !important;" onclick="toggleAboutModal(false)">[X] CLOSE</button>
             </div>
             <div class="tui-modal-content">
-                <h3 style="color: var(--accent); margin-bottom: 6px;">🐱 Meow CF App Studio v1.3.0</h3>
-                <p style="color: var(--text-main);">Suite interactiva para generación de manifiestos PWA, scripts Service Worker offline y compilación nativa Android.</p>
+                <h3 style="color: var(--tui-accent); margin-bottom: 6px;">🐱 Meow CF App Studio v1.3.0</h3>
+                <p style="color: var(--tui-text);">Suite interactiva para generación de manifiestos PWA, scripts Service Worker offline y compilación nativa Android.</p>
 
                 <div class="tui-code-block">
                     ORGANIZATION : Moustache de Chat LAB<br>
@@ -89,15 +89,13 @@
                     INTERFACE    : TUI Terminal Engine
                 </div>
 
-                <div style="margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                    <p style="color: var(--text-dim); font-size: 0.8rem;"># Repositorios y artefactos de compilación:</p>
+                <div style="margin-top: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                    <p style="color: var(--tui-text-dim); font-size: 0.78rem;"># Repositorios y artefactos de compilación:</p>
 
-                    <!-- Botón GitHub -->
                     <a href="https://github.com/galeed/Meow-CF-App" target="_blank" rel="noopener noreferrer" class="tui-btn">
                         <span>&lt;/&gt; GitHub Repository</span>
                     </a>
 
-                    <!-- Botón Descargar APK Directa -->
                     <a href="https://github.com/galeed/Meow-CF-App/actions/runs/36409236738/artifacts/10963537203" target="_blank" rel="noopener noreferrer" class="tui-btn tui-btn-accent">
                         <span>⬇ Download Direct APK [Build Artifact]</span>
                     </a>
