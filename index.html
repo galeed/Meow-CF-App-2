@@ -11,9 +11,24 @@
     <div class="terminal-window">
         <!-- BARRA DE TÍTULO DE LA TERMINAL -->
         <div class="terminal-header">
-            <span class="terminal-title">bash - meow-cf-app-studio v1.3.0</span>
-            <span>[SYS_STATUS: ONLINE]</span>
-        </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <span class="terminal-title">bash - meow-cf-app-studio v1.3.0</span>
+    </div>
+
+    <!-- BOTÓN DESPLEGABLE DE SKINS -->
+    <div class="skin-selector-wrapper">
+        <span style="font-size: 0.8rem;">🎨 Theme:</span>
+        <select id="skinSelect" class="skin-select" onchange="changeTuiSkin(this.value)">
+            <option value="green">🟢 Phosphor Green</option>
+            <option value="amber">🟠 Amber CRT</option>
+            <option value="cyan">🔵 Cyber Cyan</option>
+            <option value="dracula">🟣 Dracula Synth</option>
+            <option value="monochrome">⚪ Monochrome</option>
+            <option value="cappuccino">☕ Cappuccino</option>
+        </select>
+    </div>
+</div>
+
 
         <div class="terminal-body">
             <!-- BANNER ASCII -->
