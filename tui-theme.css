@@ -1,123 +1,133 @@
 /* ============================================================
-   MEOW CF APP STUDIO - TUI RETRO THEME (ASTRO TUI EDITION)
+   ASTRO TUI PORTFOLIO THEME ENGINE (FIX FOR IOS SAFARI)
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap');
 
-/* --- RESET ABSOLUTO PARA IOS / SAFARI Y ANULACIÓN DE REBOTES --- */
+/* --- RESET TOTAL PARA ELIMINAR BORDES BLANCOS Y REDONDEADOS DE IOS --- */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    appearance: none !important;
-    border-radius: 0px !important;
-    animation: none !important;
-    transform: none !important;
-    transition: none !important;
     -webkit-tap-highlight-color: transparent;
 }
 
+/* Forzado estricto sobre inputs, selects y botones en iOS Safari */
+input, input[type="text"], select, button, textarea {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    -webkit-border-radius: 0px !important;
+    border-radius: 0px !important;
+    background-color: var(--tui-input-bg) !important;
+    color: var(--tui-text) !important;
+    border: 1px solid var(--tui-border) !important;
+    box-shadow: none !important;
+    outline: none !important;
+    font-family: 'Fira Code', monospace !important;
+}
+
 /* ============================================================
-   PALETAS DE COLORES DINÁMICAS (SKINS)
+   PALETAS DE COLORES (COPIADAS DE ASTRO TUI PORTFOLIO)
    ============================================================ */
 
 /* 🟢 Phosphor Green (Predeterminado) */
 html, html[data-theme="green"] {
-    --bg-main: #060907;
-    --bg-panel: #0b120d;
-    --bg-header: #111c14;
-    --bg-input: #040604;
-    --border-color: #1e3a24;
-    --text-main: #4ade80;
-    --text-dim: #226b38;
-    --accent: #22c55e;
+    --tui-bg: #090d0a;
+    --tui-panel: #0f1711;
+    --tui-header: #142117;
+    --tui-border: #1e3a24;
+    --tui-text: #4ade80;
+    --tui-text-dim: #226b38;
+    --tui-accent: #22c55e;
+    --tui-input-bg: #050806;
 }
 
 /* 🟠 Amber CRT */
 html[data-theme="amber"] {
-    --bg-main: #0a0703;
-    --bg-panel: #120e07;
-    --bg-header: #1c150b;
-    --bg-input: #050301;
-    --border-color: #3d290f;
-    --text-main: #fbbf24;
-    --text-dim: #855510;
-    --accent: #f59e0b;
+    --tui-bg: #0d0a05;
+    --tui-panel: #171109;
+    --tui-header: #21180b;
+    --tui-border: #3d2b14;
+    --tui-text: #fbbf24;
+    --tui-text-dim: #785213;
+    --tui-accent: #f59e0b;
+    --tui-input-bg: #080502;
 }
 
 /* 🔵 Cyber Cyan */
 html[data-theme="cyan"] {
-    --bg-main: #03080b;
-    --bg-panel: #071017;
-    --bg-header: #0b1a26;
-    --bg-input: #020406;
-    --border-color: #133345;
-    --text-main: #38bdf8;
-    --text-dim: #155878;
-    --accent: #06b6d4;
+    --tui-bg: #050a0e;
+    --tui-panel: #09121a;
+    --tui-header: #0d1a26;
+    --tui-border: #163647;
+    --tui-text: #38bdf8;
+    --tui-text-dim: #185a7d;
+    --tui-accent: #06b6d4;
+    --tui-input-bg: #030609;
 }
 
 /* 🟣 Dracula Synth */
 html[data-theme="dracula"] {
-    --bg-main: #08050e;
-    --bg-panel: #100b1a;
-    --bg-header: #181026;
-    --bg-input: #040207;
-    --border-color: #2e1a47;
-    --text-main: #c084fc;
-    --text-dim: #5c2991;
-    --accent: #a855f7;
+    --tui-bg: #0a0712;
+    --tui-panel: #120e1f;
+    --tui-header: #1a132e;
+    --tui-border: #332152;
+    --tui-text: #c084fc;
+    --tui-text-dim: #5b308c;
+    --tui-accent: #a855f7;
+    --tui-input-bg: #05030a;
 }
 
 /* ⚪ Monochrome */
 html[data-theme="monochrome"] {
-    --bg-main: #080808;
-    --bg-panel: #111111;
-    --bg-header: #1a1a1a;
-    --bg-input: #040404;
-    --border-color: #333333;
-    --text-main: #e5e5e5;
-    --text-dim: #666666;
-    --accent: #ffffff;
+    --tui-bg: #0a0a0a;
+    --tui-panel: #121212;
+    --tui-header: #1c1c1c;
+    --tui-border: #333333;
+    --tui-text: #e5e5e5;
+    --tui-text-dim: #666666;
+    --tui-accent: #ffffff;
+    --tui-input-bg: #050505;
 }
 
 /* ☕ Cappuccino */
 html[data-theme="cappuccino"] {
-    --bg-main: #0a0806;
-    --bg-panel: #120f0b;
-    --bg-header: #1a1510;
-    --bg-input: #050403;
-    --border-color: #38291d;
-    --text-main: #e0a96d;
-    --text-dim: #704f32;
-    --accent: #dd9046;
+    --tui-bg: #0f0c0a;
+    --tui-panel: #181310;
+    --tui-header: #241b16;
+    --tui-border: #3d2f26;
+    --tui-text: #e0a96d;
+    --tui-text-dim: #785536;
+    --tui-accent: #dd9046;
+    --tui-input-bg: #080605;
 }
 
 /* ============================================================
-   ESTRUCTURA Y COMPONENTES TUI
+   ESTRUCTURA GENERAL Y COMPONENTES
    ============================================================ */
 
 body {
-    background-color: var(--bg-main) !important;
-    color: var(--text-main) !important;
-    font-family: 'Fira Code', 'Courier New', Courier, monospace !important;
-    padding: 12px;
-    line-height: 1.5;
+    background-color: var(--tui-bg) !important;
+    color: var(--tui-text) !important;
+    font-family: 'Fira Code', monospace !important;
+    padding: 10px;
+    line-height: 1.4;
     min-height: 100vh;
 }
 
+/* Ventana principal TUI */
 .terminal-window {
-    background-color: var(--bg-panel);
-    border: 1px solid var(--border-color);
-    max-width: 900px;
+    background-color: var(--tui-panel);
+    border: 1px solid var(--tui-border);
+    max-width: 850px;
     margin: 0 auto;
 }
 
+/* Encabezado Superior */
 .terminal-header {
-    background-color: var(--bg-header);
-    border-bottom: 1px solid var(--border-color);
+    background-color: var(--tui-header);
+    border-bottom: 1px solid var(--tui-border);
     padding: 8px 12px;
     display: flex;
     justify-content: space-between;
@@ -128,104 +138,100 @@ body {
 }
 
 .terminal-title {
-    color: var(--accent);
+    color: var(--tui-accent);
     font-weight: 700;
 }
 
 .terminal-body {
-    padding: 16px;
+    padding: 14px;
 }
 
-/* BANNER ASCII RESPONSIVO */
+/* Banner ASCII Responsivo */
 .ascii-banner {
-    color: var(--accent);
+    color: var(--tui-accent);
     font-family: 'Fira Code', monospace !important;
-    font-size: clamp(6px, 1.8vw, 11px);
+    font-size: clamp(5.5px, 2.1vw, 10.5px);
     line-height: 1.15;
     white-space: pre;
     overflow-x: auto;
-    margin-bottom: 1.2rem;
+    margin: 10px 0 16px 0;
     text-align: center;
     display: block;
 }
 
-/* PEAQUEÑAS PESTAÑAS TUI */
+/* Navegación por pestañas tipo TUI */
 .tui-nav {
     display: flex;
     gap: 6px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 12px;
+    border-bottom: 1px solid var(--tui-border);
+    padding-bottom: 10px;
     margin-bottom: 16px;
     flex-wrap: wrap;
 }
 
 .tui-tab {
-    background-color: transparent !important;
-    color: var(--text-dim) !important;
-    border: 1px solid var(--border-color) !important;
-    padding: 6px 10px !important;
-    font-family: inherit !important;
-    font-size: 0.8rem !important;
+    background: transparent !important;
+    color: var(--tui-text-dim) !important;
+    border: 1px solid var(--tui-border) !important;
+    padding: 5px 9px !important;
+    font-size: 0.78rem !important;
     cursor: pointer;
 }
 
 .tui-tab:hover {
-    color: var(--text-main) !important;
-    border-color: var(--text-main) !important;
+    color: var(--tui-text) !important;
+    border-color: var(--tui-text) !important;
 }
 
 .tui-tab.active {
-    background-color: var(--accent) !important;
+    background-color: var(--tui-accent) !important;
     color: #000000 !important;
-    border-color: var(--accent) !important;
-    font-weight: 700;
+    border-color: var(--tui-accent) !important;
+    font-weight: bold;
 }
 
-/* CAMPOS DE ENTRADA E FORMULARIOS (RESTABLECIDOS) */
+/* Campos de Formulario Oscuros (Fix de las cajas blancas) */
 .tui-field-group {
     margin-bottom: 14px;
 }
 
 .tui-label {
     display: block;
-    color: var(--text-main);
-    font-size: 0.82rem;
+    color: var(--tui-text);
+    font-size: 0.8rem;
     margin-bottom: 4px;
 }
 
 .tui-input-wrapper {
     display: flex;
     align-items: center;
-    background-color: var(--bg-input) !important;
-    border: 1px solid var(--border-color) !important;
+    background-color: var(--tui-input-bg) !important;
+    border: 1px solid var(--tui-border) !important;
     padding: 6px 10px;
 }
 
 .tui-prompt-symbol {
-    color: var(--accent);
+    color: var(--tui-accent);
     margin-right: 8px;
     font-weight: bold;
 }
 
 .tui-input {
+    width: 100%;
     background: transparent !important;
     border: none !important;
-    color: var(--text-main) !important;
-    font-family: inherit !important;
-    font-size: 0.88rem !important;
-    width: 100%;
-    outline: none !important;
+    color: var(--tui-text) !important;
+    font-size: 0.85rem !important;
 }
 
-/* BOTONES RETRO */
+/* Botón ejecutor */
 .tui-btn {
     background-color: transparent !important;
-    color: var(--text-main) !important;
-    border: 1px solid var(--border-color) !important;
+    color: var(--tui-text) !important;
+    border: 1px solid var(--tui-border) !important;
     padding: 8px 14px !important;
-    font-family: inherit !important;
-    font-size: 0.85rem !important;
-    font-weight: 600;
+    font-size: 0.82rem !important;
+    font-weight: bold;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -234,80 +240,78 @@ body {
 }
 
 .tui-btn:hover {
-    background-color: var(--accent) !important;
+    background-color: var(--tui-accent) !important;
     color: #000000 !important;
-    border-color: var(--accent) !important;
+    border-color: var(--tui-accent) !important;
 }
 
 .tui-btn-accent {
-    border-color: var(--accent) !important;
-    color: var(--accent) !important;
+    border-color: var(--tui-accent) !important;
+    color: var(--tui-accent) !important;
 }
 
-/* SELECTOR DE TEMA TUI */
+/* Desplegable de selección de tema */
 .skin-selector-wrapper {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    background-color: var(--bg-input);
-    border: 1px solid var(--border-color);
+    background-color: var(--tui-input-bg);
+    border: 1px solid var(--tui-border);
     padding: 2px 6px;
 }
 
 .skin-select {
     background: transparent !important;
-    color: var(--text-main) !important;
+    color: var(--tui-text) !important;
     border: none !important;
-    font-family: inherit !important;
-    font-size: 0.78rem !important;
-    font-weight: 700;
-    outline: none !important;
+    font-size: 0.75rem !important;
+    font-weight: bold;
     cursor: pointer;
-    padding: 2px 4px;
+    padding: 2px;
 }
 
 .skin-select option {
-    background-color: var(--bg-panel) !important;
-    color: var(--text-main) !important;
+    background-color: var(--tui-panel) !important;
+    color: var(--tui-text) !important;
 }
 
-/* MODALES CLI */
+/* Modales estilo CLI */
 .tui-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.88);
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    padding: 12px;
+    padding: 10px;
 }
 
 .tui-modal {
-    background-color: var(--bg-panel);
-    border: 1px solid var(--accent);
+    background-color: var(--tui-panel);
+    border: 1px solid var(--tui-accent);
     width: 100%;
-    max-width: 750px;
-    max-height: 88vh;
+    max-width: 700px;
+    max-height: 85vh;
     display: flex;
     flex-direction: column;
 }
 
 .tui-modal-content {
-    padding: 16px;
+    padding: 14px;
     overflow-y: auto;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
 }
 
 .tui-code-block {
-    background-color: var(--bg-input);
-    border: 1px dashed var(--border-color);
+    background-color: var(--tui-input-bg);
+    border: 1px dashed var(--tui-border);
     padding: 10px;
-    color: var(--text-main);
+    color: var(--tui-text);
     margin: 12px 0;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     line-height: 1.4;
 }
