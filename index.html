@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meow CF App Studio [TUI Edition]</title>
+    <link rel="stylesheet" href="tui-theme.css">
+</head>
+<body>
+
+    <div class="terminal-window">
+        <!-- BARRA DE TÍTULO DE LA TERMINAL -->
+        <div class="terminal-header">
+            <span class="terminal-title">bash - meow-cf-app-studio v1.3.0</span>
+            <span>[SYS_STATUS: ONLINE]</span>
+        </div>
+
+        <div class="terminal-body">
+            <!-- BANNER ASCII -->
+            <pre class="ascii-banner">
+ __  __                      ____ _____    _                  
+|  \/  | ___  _____7 ___    / ___|  ___|  / \   _ __  _ __    
+| |\/| |/ _ \/ _ \ \/ / |  | |   | |_    / _ \ | '_ \| '_ \   
+| |  | |  __/ (_) >  <| |__| |___|  _|  / ___ \| |_) | |_) |  
+|_|  |_|\___|\___/_/\_\\____\____|_|   /_/   \_\ .__/| .__/   
+                                               |_|   |_|      
+            </pre>
+
+            <!-- MENÚ DE NAVEGACIÓN (PESTAÑAS COMANDO) -->
+            <nav class="tui-nav">
+                <button class="tui-tab active" onclick="switchTab('manifest')">[1] Manifest.json</button>
+                <button class="tui-tab" onclick="switchTab('sw')">[2] Service Worker</button>
+                <button class="tui-tab" onclick="switchTab('github')">[3] GitHub Actions</button>
+                <button class="tui-tab" onclick="toggleHelpModal(true)">[?] Diccionario</button>
+                <button class="tui-tab" onclick="toggleAboutModal(true)">[i] Acerca de</button>
+            </nav>
+
+            <!-- CONTENIDO PRINCIPAL / FORMULARIO -->
+            <main id="app-content">
+                <div class="tui-field-group">
+                    <label class="tui-label">APP_NAME (Nombre oficial):</label>
+                    <div class="tui-input-wrapper">
+                        <span class="tui-prompt-symbol">&gt;</span>
+                        <input type="text" class="tui-input" value="Meow CF App Studio" placeholder="Escribe el nombre...">
+                    </div>
+                </div>
+
+                <div class="tui-field-group">
+                    <label class="tui-label">START_URL (Ruta inicial):</label>
+                    <div class="tui-input-wrapper">
+                        <span class="tui-prompt-symbol">&gt;</span>
+                        <input type="text" class="tui-input" value="./index.html">
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button class="tui-btn tui-btn-primary">[ EXECUTE_BUILD ]</button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL ACERCA DE (ESTILO EDITOR CLI) -->
+    <div class="tui-modal-overlay" id="aboutModal" style="display: none;">
+        <div class="tui-modal">
+            <div class="terminal-header">
+                <span class="terminal-title">view --about-system.md</span>
+                <button class="tui-btn" style="padding: 2px 6px; font-size: 0.75rem;" onclick="toggleAboutModal(false)">[X] CLOSE</button>
+            </div>
+            <div class="tui-modal-content">
+                <h3 style="color: var(--tui-green); margin-top: 0;">🐱 Meow CF App Studio v1.3.0</h3>
+                <p>Suite interactiva para estructuración de manifiestos PWA, scripts Service Worker offline y flujos CI/CD de compilación APK nativa.</p>
+
+                <div class="tui-code-block">
+                    ORGANIZATION : Moustache de Chat LAB<br>
+                    LEAD_DEV     : Galeed León<br>
+                    ARCHITECTURE : TUI / Retro Terminal Interface
+                </div>
+
+                <div style="margin-top: 25px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                    <p style="color: var(--tui-text-dim); margin: 0; font-size: 0.85rem;">
+                        # Enlaces de código fuente y artefactos de compilación:
+                    </p>
+
+                    <!-- Botón GitHub TUI -->
+                    <a href="https://github.com/galeed/Meow-CF-App" target="_blank" rel="noopener noreferrer" class="tui-btn">
+                        <span>&lt;/&gt; GitHub Repository</span>
+                    </a>
+
+                    <!-- Botón Descargar APK Directa TUI -->
+                    <a href="https://github.com/galeed/Meow-CF-App/actions/runs/36409236738/artifacts/10963537203" target="_blank" rel="noopener noreferrer" class="tui-btn tui-btn-apk">
+                        <span>⬇ Download Direct APK [Build Artifact]</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAboutModal(show) {
+            document.getElementById('aboutModal').style.display = show ? 'flex' : 'none';
+        }
+    </script>
+</body>
+</html>
