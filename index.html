@@ -846,7 +846,7 @@
         </footer>
     </div>
 
-    <!-- MODAL DICCIONARIO -->
+    <!-- MODAL DICCIONARIO COMPLETO (INTEGRADO CÓDIGO 1) -->
     <div class="tui-modal-overlay" id="helpModal" style="display: none;">
         <div class="tui-modal">
             <div class="terminal-header">
@@ -857,31 +857,103 @@
                 <div class="dict-section-title">📌 1. SISTEMAS OPERATIVOS OBJETIVO</div>
                 <div class="dict-item">
                     <h4>🤖 Android (APK / PWA)</h4>
-                    <p>Estructuración para empaquetado nativo APK/AAB usando Bubblewrap, PWABuilder o Capacitor.</p>
+                    <p>Configuración estándar para generar un archivo instalable en Android (.apk/.aab) usando herramientas como Bubblewrap, PWABuilder o Capacitor.</p>
                 </div>
                 <div class="dict-item">
                     <h4>🍎 iOS (Safari WebApp / Offline)</h4>
-                    <p>Ajustes específicos para Safari Mobile en iPhone/iPad con metas de pantalla completa y Service Worker offline.</p>
+                    <p>Ajustes específicos para Safari Mobile en iPhone/iPad, activando el modo pantalla completa nativo de iOS, icono en inicio y Service Worker para ejecución sin internet.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🚀 Universal</h4>
+                    <p>Genera la lista completa de parámetros soportados globalmente por Android, iOS y navegadores de escritorio al mismo tiempo.</p>
                 </div>
 
                 <div class="dict-section-title">📝 2. DATOS GENERALES DE LA WEBAPP</div>
                 <div class="dict-item">
-                    <h4>📛 Nombre Corto (`short_name`)</h4>
-                    <p>Nombre reducido que aparece debajo del icono en la pantalla de inicio móvil.</p>
+                    <h4>📛 Nombre de la App (`name`)</h4>
+                    <p>El nombre completo oficial de tu aplicación web tal como aparecerá en la tienda de aplicaciones o en los instaladores.</p>
                 </div>
                 <div class="dict-item">
-                    <h4>🚀 Scope (`scope`)</h4>
-                    <p>Restringe el rango de URLs pertenecientes a la app. Navegar fuera abre el navegador web.</p>
+                    <h4>🏷 Nombre Corto (`short_name`)</h4>
+                    <p>Nombre abreviado que se muestra debajo del icono en la pantalla de inicio de los teléfonos móviles cuando el espacio es reducido.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>💬 Descripción (`description`)</h4>
+                    <p>Texto explicativo breve que describe la función principal de tu aplicación para navegadores y compiladores.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🚀 Start URL (`start_url`)</h4>
+                    <p>La página inicial que se cargará automáticamente cuando el usuario abra la app compilada o el icono instalado (Ejemplo: `./index.html` o `/`).</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🌐 Scope / Alcance (`scope`)</h4>
+                    <p>Define el conjunto de URLs o directorio al que está restringida la app web. Si el usuario navega fuera de este alcance, se abrirá un navegador normal.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🔢 Versión (`version`)</h4>
+                    <p>Número de versión del paquete (ej. `1.0.0`) necesario para gestionar actualizaciones cuando compiles la APK.</p>
                 </div>
 
                 <div class="dict-section-title">🎨 3. APARIENCIA Y COMPORTAMIENTO</div>
                 <div class="dict-item">
-                    <h4>📱 Modo Standalone</h4>
-                    <p>Oculta controles de navegación del browser para ofrecer experiencia nativa.</p>
+                    <h4>📱 Modo de Pantalla (`display`)</h4>
+                    <p><b>Standalone:</b> Oculta la barra del navegador para que parezca una app nativa.<br><b>Fullscreen:</b> Oculta también la barra de estado del sistema (batería, hora).</p>
                 </div>
                 <div class="dict-item">
-                    <h4>🎨 Theme Color</h4>
-                    <p>Define el tono de la barra de estado superior del sistema operativo.</p>
+                    <h4>🔄 Orientación (`orientation`)</h4>
+                    <p>Fija si la app debe mantenerse en formato vertical (Portrait), horizontal (Landscape) o adaptarse a la rotación del teléfono (Any).</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🎨 Theme Color (`theme_color`)</h4>
+                    <p>El color que adoptará la barra de estado superior del sistema operativo y del navegador al abrir la app.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🖼 Background Color (`background_color`)</h4>
+                    <p>Color de fondo que se muestra mientras se carga la app antes de desplegar el contenido web (Pantalla de carga / Splash Screen).</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🖼 Ruta del Icono (`icons`)</h4>
+                    <p>La ubicación en tu servidor o proyecto donde está guardada la imagen del icono oficial de tu app (recomendado formato PNG de 512x512 px).</p>
+                </div>
+
+                <div class="dict-section-title">🚀 4. FUNCIONES AVANZADAS (UX, PUSH & HARDWARE)</div>
+                <div class="dict-item">
+                    <h4>🌐 Apertura de Enlaces</h4>
+                    <p>Permite configurar si los enlaces externos abren en el navegador predeterminado del sistema (Chrome/Safari) o dentro de un contenedor WebView integrado en la misma app.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>⏳ Splash Screen</h4>
+                    <p>Pantalla de bienvenida interactiva con temporizador ajustable para evitar destellos en blanco mientras carga el motor de la app.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🔔 Notificaciones Push</h4>
+                    <p>Soporte de eventos `push` y `notificationclick` dentro del Service Worker para recibir alertas remotas en segundo plano.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🌙 Modo Oscuro Dinámico</h4>
+                    <p>Inyección de la etiqueta `color-scheme` y variables CSS automáticas para adaptar la app al tema del sistema del usuario.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>📶 Banner de Conectividad en Vivo</h4>
+                    <p>Script dinámico que detecta en tiempo real si el dispositivo entra en modo offline o recupera la conexión a internet.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🛠 Permisos de Hardware</h4>
+                    <p>Declaración automática de permisos para Cámara, Micrófono y Geolocalización en los archivos de configuración nativos.</p>
+                </div>
+
+                <div class="dict-section-title">⚡ 5. MOTORES DE COMPILACIÓN SOPORTADOS</div>
+                <div class="dict-item">
+                    <h4>⚡ Capacitor CLI (Ionic)</h4>
+                    <p>El motor nativo moderno preferido para envolver proyectos web en aplicaciones Android e iOS nativas completas, ofreciendo máxima compatibilidad con plugins de hardware.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🤖 Google Bubblewrap CLI</h4>
+                    <p>Herramienta oficial de Google que transforma una PWA en un paquete Android Trusted Web Activity (TWA) ligero y de alto rendimiento.</p>
+                </div>
+                <div class="dict-item">
+                    <h4>🌐 Microsoft PWABuilder</h4>
+                    <p>Plataforma impulsada por Microsoft para empaquetar aplicaciones web progresivas en tiendas de aplicaciones como Google Play Store y Microsoft Store.</p>
                 </div>
 
                 <div style="margin-top: 16px; text-align: center;">
