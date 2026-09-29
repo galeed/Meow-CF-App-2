@@ -1,0 +1,228 @@
+/* ==========================================
+   MEOW CF APP - TUI TERMINAL THEME (ASTRO TUI)
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap');
+
+:root {
+    --tui-bg: #0d0f12;
+    --tui-panel-bg: #12151a;
+    --tui-border: #334155;
+    --tui-border-active: #22c55e;
+    --tui-text: #e2e8f0;
+    --tui-text-dim: #64748b;
+    --tui-green: #22c55e;
+    --tui-cyan: #06b6d4;
+    --tui-amber: #f59e0b;
+    --tui-red: #ef4444;
+    --font-mono: 'Fira Code', 'Courier New', Courier, monospace;
+}
+
+body {
+    background-color: var(--tui-bg);
+    color: var(--tui-text);
+    font-family: var(--font-mono);
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+/* --- TERMINAL WINDOW CONTAINER --- */
+.terminal-window {
+    background-color: var(--tui-panel-bg);
+    border: 1px solid var(--tui-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-width: 1000px;
+    margin: 0 auto;
+    border-radius: 0px; /* Sin bordes redondeados */
+}
+
+.terminal-header {
+    background-color: #1e293b;
+    border-bottom: 1px solid var(--tui-border);
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--tui-text-dim);
+}
+
+.terminal-title {
+    color: var(--tui-green);
+    font-weight: 700;
+}
+
+.terminal-body {
+    padding: 20px;
+}
+
+/* --- ASCII ART BANNER --- */
+.ascii-banner {
+    color: var(--tui-green);
+    font-weight: 700;
+    white-space: pre;
+    font-size: 11px;
+    line-height: 1.2;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* --- TABS ESTILO COMANDO --- */
+.tui-nav {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--tui-border);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.tui-tab {
+    background: transparent;
+    color: var(--tui-text-dim);
+    border: 1px solid var(--tui-border);
+    padding: 6px 14px;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    cursor: pointer;
+    border-radius: 0;
+    transition: all 0.15s ease;
+}
+
+.tui-tab:hover {
+    color: var(--tui-cyan);
+    border-color: var(--tui-cyan);
+}
+
+.tui-tab.active {
+    background-color: var(--tui-green);
+    color: #000000;
+    font-weight: 700;
+    border-color: var(--tui-green);
+}
+
+/* --- INPUTS Y FORMULARIOS --- */
+.tui-field-group {
+    margin-bottom: 16px;
+}
+
+.tui-label {
+    display: block;
+    color: var(--tui-cyan);
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.tui-input-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #090a0f;
+    border: 1px solid var(--tui-border);
+    padding: 4px 8px;
+}
+
+.tui-input-wrapper:focus-within {
+    border-color: var(--tui-border-active);
+}
+
+.tui-prompt-symbol {
+    color: var(--tui-green);
+    margin-right: 8px;
+    font-weight: bold;
+}
+
+.tui-input, .tui-select {
+    background: transparent;
+    border: none;
+    color: var(--tui-text);
+    font-family: var(--font-mono);
+    width: 100%;
+    outline: none;
+    font-size: 0.9rem;
+}
+
+/* --- BOTONES Y ACCIONES --- */
+.tui-btn {
+    background: transparent;
+    color: var(--tui-text);
+    border: 1px solid var(--tui-border);
+    padding: 8px 16px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    border-radius: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.tui-btn:hover {
+    background-color: var(--tui-text);
+    color: var(--tui-bg);
+}
+
+.tui-btn-primary {
+    border-color: var(--tui-green);
+    color: var(--tui-green);
+}
+
+.tui-btn-primary:hover {
+    background-color: var(--tui-green);
+    color: #000000;
+}
+
+.tui-btn-apk {
+    border-color: var(--tui-amber);
+    color: var(--tui-amber);
+}
+
+.tui-btn-apk:hover {
+    background-color: var(--tui-amber);
+    color: #000000;
+}
+
+/* --- MODALES CLI (OVERLAY) --- */
+.tui-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(5, 7, 10, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 16px;
+}
+
+.tui-modal {
+    background-color: var(--tui-panel-bg);
+    border: 1px solid var(--tui-border-active);
+    width: 100%;
+    max-width: 800px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.tui-modal-content {
+    padding: 20px;
+    overflow-y: auto;
+    font-size: 0.9rem;
+}
+
+.tui-code-block {
+    background-color: #05070a;
+    border: 1px dashed var(--tui-border);
+    padding: 12px;
+    color: var(--tui-green);
+    overflow-x: auto;
+    font-size: 0.85rem;
+}
