@@ -89,6 +89,25 @@
             --tui-input-bg: #080605;
         }
 
+/* Inmoviliza el desplazamiento elástico de iOS en toda la página */
+html, body {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: auto;
+}
+
+/* Permite que SOLO el contenedor principal o los modales tengan scroll interno si es necesario */
+.terminal-window {
+    height: 100%;
+    max-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+
         body {
             background-color: var(--tui-bg);
             color: var(--tui-text);
